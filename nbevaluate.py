@@ -10,16 +10,16 @@ with open(filename, "r", encoding="latin1") as f:
 content = [x.strip() for x in content]
 
 for line in content:
-	if not (line.endswith('.spam.txt') or line.endswith('.ham.txt')):
+	if not (line.endswith('spam.txt') or line.endswith('ham.txt')):
 		continue
 	else:
 		if line.startswith('spam'):
-			if line.endswith('.spam.txt'):
+			if line.endswith('spam.txt'):
 				spam_correct += 1
 			else:
 				spam_incorrect += 1
 		if line.startswith('ham'):
-			if line.endswith('.ham.txt'):
+			if line.endswith('ham.txt'):
 				ham_correct += 1
 			else:
 				ham_incorrect += 1
