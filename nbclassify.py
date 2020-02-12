@@ -4,7 +4,6 @@ import os
 import glob
 import math
 
-cwd = os.getcwd()
 correct_predicts = 0
 output_string = ""
 with open('nbmodel.txt', 'r') as fp:
@@ -14,17 +13,21 @@ data = json.loads(data)
 spam_p = data[0]
 ham_p = data[1]
 master_dict = data[2]
+tot_files = 0
 
 root = sys.argv[1]
 pys = []
-os.chdir(root)
-for file in glob.iglob('**/*', recursive=True):
+for file in glob.iglob('./' + root + '/**/*', recursive=True):
     if file.endswith('.txt'):
         pys.append(file)
 
 for filename in pys:
 	prob_s = math.log(spam_p)
 	prob_h = math.log(ham_p)
+	if 'train' in filename:
+		continue
+	# print(filename)
+	tot_files += 1
 	with open(filename, "r", encoding="latin1") as f:
 	    content = f.readlines()
 	content = [x.strip() for x in content]
@@ -47,8 +50,7 @@ for filename in pys:
 		if filename.endswith('.ham.txt'):
 			correct_predicts += 1
 
-tot_files = len(pys)
 print(correct_predicts / tot_files * 100)
-f = open(cwd + '/' + "nboutput.txt", "w")
+f = open("nboutput.txt", "w")
 f.write(output_string)
 f.close()
