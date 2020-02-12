@@ -26,11 +26,43 @@ for line in content:
 
 # print order precision, recall, f1
 
-spam_stat = [spam_correct / (spam_correct + ham_incorrect), spam_correct / (spam_correct + spam_incorrect), 0]
-spam_stat[2] = spam_stat[0] * spam_stat[1] * 2 / (spam_stat[0] + spam_stat[1])
+spam_stat = []
+ham_stat = []
+try:
+	precision = spam_correct / (spam_correct + ham_incorrect)
+	spam_stat.append(precision)
+except:
+	spam_stat.append("division by zero error")
 
-ham_stat = [ham_correct / (ham_correct + spam_incorrect), ham_correct / (ham_correct + ham_incorrect), 0]
-ham_stat[2] = ham_stat[0] * ham_stat[1] * 2 / (ham_stat[0] + ham_stat[1])
+try:
+	recall = spam_correct / (spam_correct + spam_incorrect)
+	spam_stat.append(recall)
+except:
+	spam_stat.append("division by zero error")
+
+try:
+	f1 = spam_stat[0] * spam_stat[1] * 2 / (spam_stat[0] + spam_stat[1])
+	spam_stat.append(f1)
+except:
+	spam_stat.append("division by zero error")
+
+try:
+	precision = ham_correct / (ham_correct + spam_incorrect)
+	ham_stat.append(precision)
+except:
+	ham_stat.append("division by zero error")
+
+try:
+	recall = ham_correct / (ham_correct + ham_incorrect)
+	ham_stat.append(recall)
+except:
+	ham_stat.append("division by zero error")
+
+try:
+	f1 = ham_stat[0] * ham_stat[1] * 2 / (ham_stat[0] + ham_stat[1])
+	ham_stat.append(f1)
+except:
+	ham_stat.append("division by zero error")
 
 print('spam', spam_stat)
 print('ham', ham_stat)
