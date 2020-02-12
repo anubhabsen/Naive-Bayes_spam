@@ -14,12 +14,12 @@ spam_p = data[0]
 ham_p = data[1]
 master_dict = data[2]
 
+root = sys.argv[1]
 pys = []
+os.chdir(root)
 for file in glob.iglob('**/*', recursive=True):
     if file.endswith('.txt'):
         pys.append(file)
-
-pys = pys[2:]
 
 for filename in pys:
 	prob_s = math.log(spam_p)
