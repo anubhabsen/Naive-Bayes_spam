@@ -23,6 +23,8 @@ def readtodict(filename, clas):
     for line in content:
         x = line.split()
         for j in x:
+            if not j.isalnum() or j.isdigit():
+                continue
             if clas == 'spam':
                 master_dict[j.lower()] = list(map(add, master_dict.get(j.lower(), [0, 0, 0]), [1, 0 ,1]))
                 global spam_words
@@ -32,11 +34,12 @@ def readtodict(filename, clas):
                 global ham_words
                 ham_words += 1
 
-# root_dir = sys.argv[1]
-root_dir = "Spam or Ham"
-root_dir += '/train/'
-for file in glob.iglob('./10pdata/**/*', recursive=True):
+root_dir = sys.argv[1]
+# root_dir += '/train/'
+for file in glob.iglob('./' + root_dir + '/**/*', recursive=True):
     if file.endswith('.txt'):
+        if 'dev' in file:
+            continue
         if 'spam' in file:
             readtodict(file, 'spam')
         if 'ham' in file:
