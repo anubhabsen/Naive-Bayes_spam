@@ -4,6 +4,7 @@ import os
 import glob
 import math
 
+cwd = os.getcwd()
 correct_predicts = 0
 output_string = ""
 with open('nbmodel.txt', 'r') as fp:
@@ -36,18 +37,18 @@ for filename in pys:
 			prob_s += math.log(master_dict[j][0])
 			prob_h += math.log(master_dict[j][1])
 	if prob_s > prob_h:
-		output_string += 'spam ' + filename + '\n'
+		output_string += 'spam ' + root + '/' + filename + '\n'
 		# print('spam ' + filename)
 		if filename.endswith('.spam.txt'):
 			correct_predicts += 1
 	else:
-		output_string += 'ham ' + filename + '\n'
+		output_string += 'ham ' + root + '/' + filename + '\n'
 		# print('ham ' + filename)
 		if filename.endswith('.ham.txt'):
 			correct_predicts += 1
 
 tot_files = len(pys)
 print(correct_predicts / tot_files * 100)
-f = open("nboutput.txt", "w")
+f = open(cwd + '/' + "nboutput.txt", "w")
 f.write(output_string)
 f.close()
