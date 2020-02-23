@@ -29,13 +29,13 @@ for line in content:
 spam_stat = []
 ham_stat = []
 try:
-	precision = spam_correct / (spam_correct + ham_incorrect)
+	precision = spam_correct / (spam_correct + spam_incorrect)
 	spam_stat.append(precision)
 except:
 	spam_stat.append("division by zero error")
 
 try:
-	recall = spam_correct / (spam_correct + spam_incorrect)
+	recall = spam_correct / (spam_correct + ham_incorrect)
 	spam_stat.append(recall)
 except:
 	spam_stat.append("division by zero error")
@@ -47,13 +47,13 @@ except:
 	spam_stat.append("division by zero error")
 
 try:
-	precision = ham_correct / (ham_correct + spam_incorrect)
+	precision = ham_correct / (ham_correct + ham_incorrect)
 	ham_stat.append(precision)
 except:
 	ham_stat.append("division by zero error")
 
 try:
-	recall = ham_correct / (ham_correct + ham_incorrect)
+	recall = ham_correct / (ham_correct + spam_incorrect)
 	ham_stat.append(recall)
 except:
 	ham_stat.append("division by zero error")
