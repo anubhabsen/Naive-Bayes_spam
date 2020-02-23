@@ -1,17 +1,25 @@
 import json
-# from nltk.stem import PorterStemmer
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import words
 import os
 import sys
 from operator import add
 import glob
 
 # ps = PorterStemmer()
+ps = WordNetLemmatizer()
 spam_words = 0
 ham_words = 0
 spams = 0
 hams = 0
 master_dict = {}
 stop_words = ["i", "me", "my", "myself", "we", "our", "ours", "ourselves", "you", "your", "yours", "yourself", "yourselves", "he", "him", "his", "himself", "she", "her", "hers", "herself", "it", "its", "itself", "they", "them", "their", "theirs", "themselves", "what", "which", "who", "whom", "this", "that", "these", "those", "am", "is", "are", "was", "were", "be", "been", "being", "have", "has", "had", "having", "do", "does", "did", "doing", "a", "an", "the", "and", "but", "if", "or", "because", "as", "until", "while", "of", "at", "by", "for", "with", "about", "against", "between", "into", "through", "during", "before", "after", "above", "below", "to", "from", "up", "down", "in", "out", "on", "off", "over", "under", "again", "further", "then", "once", "here", "there", "when", "where", "why", "how", "all", "any", "both", "each", "few", "more", "most", "other", "some", "such", "no", "nor", "not", "only", "own", "same", "so", "than", "too", "very", "s", "t", "can", "will", "just", "don", "should", "now"]
+# stop_words = ['i', 'me', 'my', 'myself', 'we', 'our', 'our', 'ourselv', 'you', 'your', 'your', 'yourself', 'yourselv', 'he', 'him', 'hi', 'himself', 'she', 'her', 'her', 'herself', 'it', 'it', 'itself', 'they', 'them', 'their', 'their', 'themselv', 'what', 'which', 'who', 'whom', 'thi', 'that', 'these', 'those', 'am', 'is', 'are', 'wa', 'were', 'be', 'been', 'be', 'have', 'ha', 'had', 'have', 'do', 'doe', 'did', 'do', 'a', 'an', 'the', 'and', 'but', 'if', 'or', 'becaus', 'as', 'until', 'while', 'of', 'at', 'by', 'for', 'with', 'about', 'against', 'between', 'into', 'through', 'dure', 'befor', 'after', 'abov', 'below', 'to', 'from', 'up', 'down', 'in', 'out', 'on', 'off', 'over', 'under', 'again', 'further', 'then', 'onc', 'here', 'there', 'when', 'where', 'whi', 'how', 'all', 'ani', 'both', 'each', 'few', 'more', 'most', 'other', 'some', 'such', 'no', 'nor', 'not', 'onli', 'own', 'same', 'so', 'than', 'too', 'veri', 's', 't', 'can', 'will', 'just', 'don', 'should', 'now']
+# word_dict = words.words()
+# word_dict = [ps.stem(i) for i in word_dict]
+# word_dict = set(word_dict)
+stop_words = [ps.lemmatize(i) for i in stop_words]
 
 def readtodict(filename, clas):
     if clas == 'spam':
@@ -26,14 +34,16 @@ def readtodict(filename, clas):
     for line in content:
         x = line.split()
         for j in x:
-            # if not j.isalnum() or j.isdigit() or j.lower() in stop_words:
-            #     continue
+            j = j.lower()
+            j = ps.lemmatize(j)
+            if j in stop_words or not j.isalnum():
+                continue
             if clas == 'spam':
-                master_dict[j.lower()] = list(map(add, master_dict.get(j.lower(), [0, 0, 0]), [1, 0 ,1]))
+                master_dict[j] = list(map(add, master_dict.get(j, [0, 0, 0]), [1, 0 ,1]))
                 global spam_words
                 spam_words += 1
             elif clas == 'ham':
-                master_dict[j.lower()] = list(map(add, master_dict.get(j.lower(), [0, 0, 0]), [0, 1 ,1]))
+                master_dict[j] = list(map(add, master_dict.get(j, [0, 0, 0]), [0, 1 ,1]))
                 global ham_words
                 ham_words += 1
 

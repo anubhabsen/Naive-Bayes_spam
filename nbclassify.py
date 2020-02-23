@@ -1,4 +1,5 @@
-# from nltk.stem import PorterStemmer
+from nltk.stem import PorterStemmer
+from nltk.stem import WordNetLemmatizer
 import json
 import sys
 import os
@@ -6,6 +7,7 @@ import glob
 import math
 
 # ps = PorterStemmer()
+ps = WordNetLemmatizer()
 correct_predicts = 0
 output_string = ""
 with open('nbmodel.txt', 'r') as fp:
@@ -27,7 +29,6 @@ for file in glob.iglob(root + '/**/*', recursive=True):
 for filename in pys:
 	prob_s = math.log(spam_p)
 	prob_h = math.log(ham_p)
-	# print(filename)
 	tot_files += 1
 	with open(filename, "r", encoding="latin1") as f:
 	    content = f.readlines()
@@ -36,6 +37,7 @@ for filename in pys:
 		x = line.split()
 		for j in x:
 			j = j.lower()
+			j = ps.lemmatize(j)
 			if j not in master_dict:
 				continue
 			prob_s += math.log(master_dict[j][0])
@@ -43,15 +45,15 @@ for filename in pys:
 	if prob_s > prob_h:
 		output_string += 'spam' + '\t' + filename + '\n'
 		# print('spam ' + filename)
-		# if filename.endswith('.spam.txt'):
-		# 	correct_predicts += 1
+		if filename.endswith('.spam.txt'):
+			correct_predicts += 1
 	else:
 		output_string += 'ham' + '\t' + filename + '\n'
 		# print('ham ' + filename)
-		# if filename.endswith('.ham.txt'):
-		# 	correct_predicts += 1
+		if filename.endswith('.ham.txt'):
+			correct_predicts += 1
 
-# print(correct_predicts / tot_files * 100)
+print(correct_predicts / tot_files * 100)
 f = open("nboutput.txt", "w")
 f.write(output_string)
 f.close()
